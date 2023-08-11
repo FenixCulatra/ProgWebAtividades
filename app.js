@@ -1,14 +1,13 @@
 const express               = require("express");
 const cors                  = require("cors");
-// const html                  = require("html");
 const ativ                  = require("./scripts/activity");
+const db                    = require("./query");
 const app = new express();
 
+const imgs = ["https://fenixculatra.github.io/PlantasMedicinais/imagens/capim-limao.jpg", ]
 
-const corsConfig = {
-    origin: ['http://172.19.201.20:5500', 'about:blank'],
-
-};
+app.set("view engine", "ejs");
+app.set("views", "./pages");
 
 app.use(cors());
 
@@ -20,9 +19,12 @@ app.get("/", (req, res) => {
     res.send(text);
 })
 
-app.use("/home", (req, res) => {
-    res.render(__dirname + '/pages/index.html', {name:"João"});
-})
+app.get("/plantas", async (req, res) => {
+        let j = await db.getAllPlantas(5);
+
+        console.log(j);
+        res.send(j);
+    })
 
 app.get("/atividade1", ativ.Atividade1);
 
